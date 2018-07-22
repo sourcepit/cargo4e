@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.sourcepit</groupId>
+		<artifactId>srcpit-parent</artifactId>
+		<version>23</version>
+	</parent>
+
+	<artifactId>cargo4e</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<properties>
+		<tycho.version>1.2.0</tycho.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.sourcepit</groupId>
+			<artifactId>cargo4j-model</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<!-- repo to resolve parent pom from -->
+			<id>srcpit-public</id>
+			<url>http://nexus.sourcepit.org/content/groups/public/</url>
+		</repository>
+		<repository>
+			<id>photon</id>
+			<url>http://download.eclipse.org/releases/photon</url>
+			<layout>p2</layout>
+		</repository>
+	</repositories>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>srcpit-public</id>
+			<url>http://nexus.sourcepit.org/content/groups/public/</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.sourcepit.b2</groupId>
+				<artifactId>b2-maven-plugin</artifactId>
+				<version>0.20.0</version>
+				<extensions>true</extensions>
+				<configuration>
+					<extensions>
+						<extension>
+							<groupId>org.sourcepit.b2</groupId>
+							<artifactId>b2-maven-dependencies-site-generator</artifactId>
+							<version>0.20.0</version>
+						</extension>
+					</extensions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>${tycho.version}</version>
+				<configuration>
+					<resolver>p2</resolver>
+					<dependency-resolution>
+						<extraRequirements>
+							<requirement>
+								<id>org.eclipse.platform</id>
+								<versionRange>0.0.0</versionRange>
+								<type>eclipse-feature</type>
+							</requirement>
+						</extraRequirements>
+					</dependency-resolution>
+					<environments>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
