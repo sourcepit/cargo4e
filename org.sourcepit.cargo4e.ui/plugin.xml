@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            category="org.sourcepit.cargo4e.ui.RustCategoryId"
+            class="org.sourcepit.cargo4e.ui.CargoView"
+            icon="icons/obj16/classfo_obj.gif"
+            id="org.sourcepit.cargo4e.ui.CargoViewId"
+            name="Cargo"
+            restorable="true">
+      </view>
+      <category
+            id="org.sourcepit.cargo4e.ui.RustCategoryId"
+            name="Rust">
+      </category>
+   </extension>
+
+</plugin>

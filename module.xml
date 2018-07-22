@@ -23,6 +23,11 @@
 			<artifactId>cargo4j-model</artifactId>
 			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>org.sourcepit</groupId>
+			<artifactId>cargo4j-exec</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>
