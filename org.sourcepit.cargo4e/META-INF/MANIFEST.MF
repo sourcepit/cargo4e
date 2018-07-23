@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Cargo4e
+Bundle-SymbolicName: org.sourcepit.cargo4e
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: org.sourcepit.cargo4e.Activator
+Require-Bundle: org.eclipse.core.runtime
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Automatic-Module-Name: org.sourcepit.cargo4e
+Bundle-ActivationPolicy: lazy
