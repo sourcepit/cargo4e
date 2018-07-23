@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         id="RustNature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run
+               class="org.sourcepit.cargo4e.RustNature">
+         </run>
+      </runtime>
+   </extension>
+
+</plugin>
