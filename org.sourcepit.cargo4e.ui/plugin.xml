@@ -4,17 +4,40 @@
    <extension
          point="org.eclipse.ui.views">
       <view
-            category="org.sourcepit.cargo4e.ui.RustCategoryId"
+            category="org.sourcepit.cargo4e.ui.RustViewsCategoryId"
             class="org.sourcepit.cargo4e.ui.CargoView"
-            icon="icons/obj16/classfo_obj.gif"
+            icon="icons/cargo.png"
             id="org.sourcepit.cargo4e.ui.CargoViewId"
             name="Cargo"
             restorable="true">
       </view>
       <category
-            id="org.sourcepit.cargo4e.ui.RustCategoryId"
+            id="org.sourcepit.cargo4e.ui.RustViewsCategoryId"
             name="Rust">
       </category>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="org.sourcepit.cargo4e.ui.RustWizardsId"
+            name="Rust">
+      </category>
+      <wizard
+            category="org.sourcepit.cargo4e.ui.RustWizardsId"
+            class="org.sourcepit.cargo4e.ui.wizards.NewRustProjectWizard"
+            icon="icons/rust.png"
+            id="org.sourcepit.cargo4e.ui.wizards.NewRustProjectWizard"
+            name="Rust Project"
+            project="true">
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.ide.projectNatureImages">
+      <image
+            icon="icons/rust_overlay.gif"
+            id="org.sourcepit.cargo4e.ui.RustNatureOverlay"
+            natureId="org.sourcepit.cargo4e.RustNature">
+      </image>
    </extension>
 
 </plugin>
