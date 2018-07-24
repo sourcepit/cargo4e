@@ -51,7 +51,7 @@ mvn org.sourcepit:target-platform-maven-plugin:0.17.0:localize -Dtpmp.targetDir=
     
 3.  Open the _.target_ file for your OS and set it as active Target Platform in PDE
     
-    ![Set active Target Platform](set_target_platform.png)
+    ![Set active Target Platform](images/set_target_platform.png)
     
 ### Import Maven projects of Cargo4j (optional)
 
