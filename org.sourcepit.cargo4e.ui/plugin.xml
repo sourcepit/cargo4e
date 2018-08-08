@@ -35,9 +35,15 @@
          point="org.eclipse.ui.ide.projectNatureImages">
       <image
             icon="icons/rust_overlay.gif"
-            id="org.sourcepit.cargo4e.ui.RustNatureOverlay"
-            natureId="org.sourcepit.cargo4e.RustNature">
+            id="org.sourcepit.cargo4e.ui.CargoNatureOverlay"
+            natureId="org.sourcepit.cargo4e.CargoNature">
       </image>
+   </extension>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup
+            class="org.sourcepit.cargo4e.ui.CargoUiStartup">
+      </startup>
    </extension>
 
 </plugin>

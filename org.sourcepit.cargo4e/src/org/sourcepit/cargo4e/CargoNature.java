@@ -3,10 +3,9 @@ package org.sourcepit.cargo4e;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
+import org.sourcepit.cargo4j.model.Metadata;
 
-public class RustNature implements IProjectNature {
-
-	public static final String NATURE_ID = Activator.BUNDLE_ID + ".RustNature";
+public class CargoNature implements ICargoProject, IProjectNature {
 
 	private IProject project;
 
@@ -28,4 +27,8 @@ public class RustNature implements IProjectNature {
 	public void deconfigure() throws CoreException {
 	}
 
+	@Override
+	public Metadata getMetadata() {
+		return CargoCorePlugin.getCargoCore().getMetadata(project);
+	}
 }

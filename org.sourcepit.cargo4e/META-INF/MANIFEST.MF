@@ -3,9 +3,14 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Cargo4e
 Bundle-SymbolicName: org.sourcepit.cargo4e;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: org.sourcepit.cargo4e.Activator
+Bundle-Activator: org.sourcepit.cargo4e.CargoCorePlugin
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.core.resources
+ org.eclipse.core.resources,
+ org.sourcepit.cargo4j.exec,
+ org.sourcepit.cargo4j.model,
+ com.fasterxml.jackson.core.jackson-databind,
+ com.fasterxml.jackson.datatype.jackson-datatype-jdk8,
+ com.fasterxml.jackson.core.jackson-core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: org.sourcepit.cargo4e
 Bundle-ActivationPolicy: lazy

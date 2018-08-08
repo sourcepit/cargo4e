@@ -2,11 +2,11 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         id="RustNature"
+         id="CargoNature"
          point="org.eclipse.core.resources.natures">
       <runtime>
          <run
-               class="org.sourcepit.cargo4e.RustNature">
+               class="org.sourcepit.cargo4e.CargoNature">
          </run>
       </runtime>
    </extension>

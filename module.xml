@@ -37,6 +37,11 @@
 			<url>http://nexus.sourcepit.org/content/groups/public/</url>
 		</repository>
 		<repository>
+			<id>e4.8</id>
+			<url>http://download.eclipse.org/eclipse/updates/4.8</url>
+			<layout>p2</layout>
+		</repository>
+		<repository>
 			<id>photon</id>
 			<url>http://download.eclipse.org/releases/photon</url>
 			<layout>p2</layout>
@@ -87,6 +92,16 @@
 							</requirement>
 							<requirement>
 								<id>org.eclipse.corrosion.feature</id>
+								<versionRange>0.0.0</versionRange>
+								<type>eclipse-feature</type>
+							</requirement>
+							<requirement>
+								<id>org.eclipse.test</id>
+								<versionRange>0.0.0</versionRange>
+								<type>eclipse-feature</type>
+							</requirement>
+							<requirement>
+								<id>org.eclipse.jdt.source</id>
 								<versionRange>0.0.0</versionRange>
 								<type>eclipse-feature</type>
 							</requirement>
