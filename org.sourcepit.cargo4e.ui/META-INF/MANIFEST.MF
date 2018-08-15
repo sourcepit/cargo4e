@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.ide,
  org.sourcepit.cargo4j.model,
  org.sourcepit.cargo4j.exec,
- org.sourcepit.cargo4e
+ org.sourcepit.cargo4e,
+ org.eclipse.ui.navigator
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: org.sourcepit.cargo4e.ui
 Bundle-ActivationPolicy: lazy

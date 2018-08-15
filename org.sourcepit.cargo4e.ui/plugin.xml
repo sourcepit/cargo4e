@@ -45,5 +45,31 @@
             class="org.sourcepit.cargo4e.ui.CargoUiStartup">
       </startup>
    </extension>
+   <extension
+         point="org.eclipse.ui.navigator.navigatorContent">
+      <navigatorContent
+            activeByDefault="true"
+            contentProvider="org.sourcepit.cargo4e.ui.RustNavigatorContentProvider"
+            icon="icons/rust.png"
+            id="org.sourcepit.cargo4e.ui.navigatorContent"
+            labelProvider="org.sourcepit.cargo4e.ui.RustNaviatorLaelProvider"
+            name="Rust Elements"
+            priority="normal">
+         <enablement><or><adapt type="org.sourcepit.cargo4e.ICargoProject" >
+					</adapt>
+                     </or></enablement>
+      </navigatorContent>
+   </extension>
+   <extension
+         point="org.eclipse.ui.navigator.viewer">
+      <viewerContentBinding
+            viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+         <includes>
+            <contentExtension
+                  pattern="org.sourcepit.cargo4e.ui.navigatorContent">
+            </contentExtension>
+         </includes>
+      </viewerContentBinding>
+   </extension>
 
 </plugin>

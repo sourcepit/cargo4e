@@ -10,5 +10,15 @@
          </run>
       </runtime>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.core.resources.IProject"
+            class="org.sourcepit.cargo4e.CargoAdapterFactory">
+         <adapter
+               type="org.sourcepit.cargo4e.ICargoProject">
+         </adapter>
+      </factory>
+   </extension>
 
 </plugin>
