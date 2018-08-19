@@ -6,17 +6,19 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class CargoUiPlugin extends AbstractUIPlugin {
 
 	public static final String BUNDLE_ID = "org.sourcepit.cargo4e.ui";
 
 	// The shared instance
-	private static Activator plugin;
+	private static CargoUiPlugin plugin;
+
+	private CargoUi cargoUi;
 
 	/**
 	 * The constructor
 	 */
-	public Activator() {
+	public CargoUiPlugin() {
 	}
 
 	/*
@@ -28,6 +30,8 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
+
+		cargoUi = new CargoUi(context.getBundle());
 	}
 
 	/*
@@ -37,6 +41,9 @@ public class Activator extends AbstractUIPlugin {
 	 * org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
+		cargoUi.dispose();
+		cargoUi = null;
+
 		plugin = null;
 		super.stop(context);
 	}
@@ -46,8 +53,12 @@ public class Activator extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static Activator getDefault() {
+	public static CargoUiPlugin getDefault() {
 		return plugin;
+	}
+
+	public static CargoUi getCargoUi() {
+		return plugin.cargoUi;
 	}
 
 }

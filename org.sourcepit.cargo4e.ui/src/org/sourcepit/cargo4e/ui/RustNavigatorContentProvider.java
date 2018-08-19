@@ -3,7 +3,6 @@ package org.sourcepit.cargo4e.ui;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.sourcepit.cargo4e.ICargoProject;
