@@ -1,4 +1,4 @@
-package org.sourcepit.cargo4e;
+package org.sourcepit.cargo4e.tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -25,6 +25,10 @@ import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestName;
+import org.sourcepit.cargo4e.CargoCoreJob;
+import org.sourcepit.cargo4e.CargoCorePlugin;
+import org.sourcepit.cargo4e.ICargoProject;
+import org.sourcepit.cargo4e.NewRustProjectCoreRunnable;
 import org.sourcepit.cargo4j.model.Metadata;
 
 import com.moandjiezana.toml.Toml;
