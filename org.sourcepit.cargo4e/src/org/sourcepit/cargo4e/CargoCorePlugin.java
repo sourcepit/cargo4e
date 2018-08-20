@@ -11,7 +11,7 @@ import org.osgi.framework.BundleContext;
 
 public class CargoCorePlugin implements BundleActivator {
 
-	static final String BUNDLE_ID = "org.sourcepit.cargo4e";
+	public static final String BUNDLE_ID = "org.sourcepit.cargo4e";
 
 	private static CargoCorePlugin plugin;
 
