@@ -46,6 +46,11 @@
 			<url>http://download.eclipse.org/releases/photon</url>
 			<layout>p2</layout>
 		</repository>
+		<repository>
+			<id>corrosion</id>
+			<url>http://download.eclipse.org/corrosion/snapshots/</url>
+			<layout>p2</layout>
+		</repository>
 	</repositories>
 
 	<pluginRepositories>
