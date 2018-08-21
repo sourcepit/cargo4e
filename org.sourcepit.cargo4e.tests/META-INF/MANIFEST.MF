@@ -11,4 +11,5 @@ Require-Bundle: org.sourcepit.cargo4e,
  org.eclipse.core.jobs,
  org.eclipse.equinox.registry,
  com.moandjiezana.toml,
- org.sourcepit.cargo4j.model
+ org.sourcepit.cargo4j.model,
+ org.eclipse.core.runtime

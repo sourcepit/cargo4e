@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.ObjectUtils;
 import org.eclipse.core.resources.IProject;
 import org.sourcepit.cargo4j.model.Metadata;
 
@@ -30,15 +31,20 @@ public class MetadataStore {
 
 	public void setMetadata(IProject eclipseProject, Metadata metadata) {
 		final Metadata oldMetadata = getMetadata(eclipseProject);
-		if (!metadata.equals(oldMetadata)) {
+		if (!ObjectUtils.equals(metadata, oldMetadata)) {
 			synchronized (projectToMetadataMap) {
 				final File projectStateFile = new File(stateLocation, eclipseProject.getName() + ".json");
-				try (FileOutputStream out = new FileOutputStream(projectStateFile)) {
-					mapper.writeValue(out, metadata);
-				} catch (IOException e) {
-					e.printStackTrace();
+				if (metadata == null) {
+					projectStateFile.delete();
+					projectToMetadataMap.remove(eclipseProject);
+				} else {
+					try (FileOutputStream out = new FileOutputStream(projectStateFile)) {
+						mapper.writeValue(out, metadata);
+					} catch (IOException e) {
+						throw new IllegalStateException(e);
+					}
+					projectToMetadataMap.put(eclipseProject, metadata);
 				}
-				projectToMetadataMap.put(eclipseProject, metadata);
 			}
 		}
 	}

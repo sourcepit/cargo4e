@@ -1,11 +1,13 @@
 package org.sourcepit.cargo4e.tests;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -18,6 +20,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
@@ -96,6 +99,36 @@ public class CargoCoreTest {
 		Metadata newMetadata = cargoProject.getMetadata();
 		assertEquals(1, metadata.getPackages().size());
 		assertEquals(2, newMetadata.getPackages().size());
+	}
+
+	@Test
+	public void testCloseDeleteProjet() throws Exception {
+		File stateLocation = Platform.getStateLocation(Platform.getBundle(CargoCorePlugin.BUNDLE_ID)).toFile();
+		assertTrue(stateLocation.exists());
+
+		String projectName = testName.getMethodName();
+
+		File projectStateFile = new File(stateLocation, projectName + ".json");
+		assertFalse(projectStateFile.exists());
+
+		IProject project = createCargoProject(projectName);
+		assertTrue(project.exists());
+
+		Job.getJobManager().join(CargoCoreJob.FAMILY, null);
+
+		assertTrue(projectStateFile.exists());
+
+		project.close(null);
+
+		Job.getJobManager().join(CargoCoreJob.FAMILY, null);
+
+		assertTrue(projectStateFile.exists());
+
+		project.delete(true, null);
+
+		Job.getJobManager().join(CargoCoreJob.FAMILY, null);
+
+		assertFalse(projectStateFile.exists());
 	}
 
 	private static void addDependency(IProject project, String name, String version) throws CoreException {

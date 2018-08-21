@@ -10,7 +10,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.sourcepit.cargo4j.model,
  com.fasterxml.jackson.core.jackson-databind,
  com.fasterxml.jackson.datatype.jackson-datatype-jdk8,
- com.fasterxml.jackson.core.jackson-core
+ com.fasterxml.jackson.core.jackson-core,
+ org.apache.commons.lang
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: org.sourcepit.cargo4e
 Bundle-ActivationPolicy: lazy

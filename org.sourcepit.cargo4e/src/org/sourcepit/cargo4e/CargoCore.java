@@ -54,7 +54,7 @@ public class CargoCore implements IResourceChangeListener {
 		initJob.schedule();
 
 		eclipseWorkspace.addResourceChangeListener(this,
-				IResourceChangeEvent.POST_CHANGE | IResourceChangeEvent.PRE_CLOSE | IResourceChangeEvent.PRE_DELETE);
+				IResourceChangeEvent.POST_CHANGE | IResourceChangeEvent.PRE_DELETE);
 	}
 
 	public synchronized void stop() {
@@ -73,10 +73,9 @@ public class CargoCore implements IResourceChangeListener {
 	@Override
 	public void resourceChanged(IResourceChangeEvent event) {
 		switch (event.getType()) {
-		case IResourceChangeEvent.PRE_CLOSE:
 		case IResourceChangeEvent.PRE_DELETE:
 			final IProject project = (IProject) event.getResource();
-			if (hasCargoNature(project)) {
+			if (metadataStore.getMetadata(project) != null) {
 				metadataStore.setMetadata(project, null);
 			}
 			break;
@@ -93,7 +92,8 @@ public class CargoCore implements IResourceChangeListener {
 						return true;
 					}
 					if (resource instanceof IProject) {
-						return ((IProject) resource).hasNature(ICargoProject.NATURE_ID);
+						final IProject project = (IProject) resource;
+						return project.isOpen() && project.hasNature(ICargoProject.NATURE_ID);
 					}
 					if (resource instanceof IFile && "Cargo.toml".equals(resource.getName())) {
 						switch (delta.getKind()) {
