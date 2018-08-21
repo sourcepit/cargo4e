@@ -38,7 +38,7 @@ public class CargoCorePlugin implements BundleActivator {
 		cargoCore.start();
 	}
 
-	public static CargoCore getCargoCore() {
+	public static ICargoCore getCargoCore() {
 		return plugin.cargoCore;
 	}
 

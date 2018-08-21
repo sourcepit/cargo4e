@@ -15,7 +15,7 @@ import org.sourcepit.cargo4j.model.Metadata;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
-public class MetadataStore {
+public abstract class MetadataStore {
 
 	private final Map<IProject, Metadata> projectToMetadataMap = new HashMap<>();
 
@@ -29,25 +29,28 @@ public class MetadataStore {
 		mapper.registerModule(new Jdk8Module());
 	}
 
-	public void setMetadata(IProject eclipseProject, Metadata metadata) {
-		final Metadata oldMetadata = getMetadata(eclipseProject);
+	public void setMetadata(IProject project, Metadata metadata) {
+		final Metadata oldMetadata = getMetadata(project);
 		if (!ObjectUtils.equals(metadata, oldMetadata)) {
 			synchronized (projectToMetadataMap) {
-				final File projectStateFile = new File(stateLocation, eclipseProject.getName() + ".json");
+				final File projectStateFile = new File(stateLocation, project.getName() + ".json");
 				if (metadata == null) {
 					projectStateFile.delete();
-					projectToMetadataMap.remove(eclipseProject);
+					projectToMetadataMap.remove(project);
 				} else {
 					try (FileOutputStream out = new FileOutputStream(projectStateFile)) {
 						mapper.writeValue(out, metadata);
 					} catch (IOException e) {
 						throw new IllegalStateException(e);
 					}
-					projectToMetadataMap.put(eclipseProject, metadata);
+					projectToMetadataMap.put(project, metadata);
 				}
+				noifyMetadataChanged(project, oldMetadata, metadata);
 			}
 		}
 	}
+
+	protected abstract void noifyMetadataChanged(IProject project, Metadata oldMetadata, Metadata newMetadata);
 
 	public Metadata getMetadata(IProject eclipseProject) {
 		synchronized (projectToMetadataMap) {

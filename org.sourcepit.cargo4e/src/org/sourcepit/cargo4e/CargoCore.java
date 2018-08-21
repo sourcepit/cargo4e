@@ -3,6 +3,7 @@ package org.sourcepit.cargo4e;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -19,13 +20,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.sourcepit.cargo4j.model.Metadata;
 
-public class CargoCore implements IResourceChangeListener {
+public class CargoCore implements IResourceChangeListener, ICargoCore {
 
 	private final IWorkspace eclipseWorkspace;
 
 	private final IJobManager jobManager;
 
 	private final File stateLocation;
+
+	private final List<IMetadataChangedListener> listeners = new CopyOnWriteArrayList<>();
 
 	private MetadataStore metadataStore;
 
@@ -44,7 +47,14 @@ public class CargoCore implements IResourceChangeListener {
 		}
 		running = true;
 
-		metadataStore = new MetadataStore(stateLocation);
+		metadataStore = new MetadataStore(stateLocation) {
+			@Override
+			protected void noifyMetadataChanged(IProject project, Metadata oldMetadata, Metadata newMetadata) {
+				for (IMetadataChangedListener listener : listeners) {
+					listener.onMetadataChanged(project, oldMetadata, newMetadata);
+				}
+			}
+		};
 
 		final InitializeCargoProjectsRunnable initRunnable = new InitializeCargoProjectsRunnable(eclipseWorkspace,
 				jobManager, metadataStore);
@@ -55,6 +65,16 @@ public class CargoCore implements IResourceChangeListener {
 
 		eclipseWorkspace.addResourceChangeListener(this,
 				IResourceChangeEvent.POST_CHANGE | IResourceChangeEvent.PRE_DELETE);
+	}
+
+	@Override
+	public void addMetadataChangedListener(IMetadataChangedListener listener) {
+		listeners.add(listener);
+	}
+
+	@Override
+	public void removeMetadataChangedListener(IMetadataChangedListener listener) {
+		listeners.remove(listener);
 	}
 
 	public synchronized void stop() {
@@ -139,6 +159,7 @@ public class CargoCore implements IResourceChangeListener {
 		}
 	}
 
+	@Override
 	public Metadata getMetadata(IProject eclipseProject) {
 		return hasCargoNature(eclipseProject) ? metadataStore.getMetadata(eclipseProject) : null;
 	}
