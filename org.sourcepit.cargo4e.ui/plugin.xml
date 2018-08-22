@@ -2,21 +2,6 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension
-         point="org.eclipse.ui.views">
-      <view
-            category="org.sourcepit.cargo4e.ui.RustViewsCategoryId"
-            class="org.sourcepit.cargo4e.ui.CargoView"
-            icon="icons/cargo.png"
-            id="org.sourcepit.cargo4e.ui.CargoViewId"
-            name="Cargo"
-            restorable="true">
-      </view>
-      <category
-            id="org.sourcepit.cargo4e.ui.RustViewsCategoryId"
-            name="Rust">
-      </category>
-   </extension>
-   <extension
          point="org.eclipse.ui.newWizards">
       <category
             id="org.sourcepit.cargo4e.ui.RustWizardsId"
