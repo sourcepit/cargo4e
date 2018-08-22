@@ -52,7 +52,7 @@
             contentProvider="org.sourcepit.cargo4e.ui.RustNavigatorContentProvider"
             icon="icons/rust.png"
             id="org.sourcepit.cargo4e.ui.navigatorContent"
-            labelProvider="org.sourcepit.cargo4e.ui.RustNaviatorLaelProvider"
+            labelProvider="org.sourcepit.cargo4e.ui.RustNaviatorLabelProvider"
             name="Rust Elements"
             priority="normal">
          <enablement><or><adapt type="org.sourcepit.cargo4e.ICargoProject" >

@@ -10,9 +10,9 @@ import org.eclipse.swt.graphics.Image;
 import org.osgi.framework.Bundle;
 
 public class CargoUi {
-	public static final String IMG_PACKAGES_CONTAINER = "library_obj.png";
+	public static final String IMG_CRATES_CONTAINER = "library_obj.png";
 
-	public static final String IMG_PACKAGE = "jar_obj.png";
+	public static final String IMG_CRATE = "jar_obj.png";
 
 	private final ImageRegistry imageRegistry = new ImageRegistry();
 

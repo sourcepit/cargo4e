@@ -15,4 +15,5 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Automatic-Module-Name: org.sourcepit.cargo4e
 Bundle-ActivationPolicy: lazy
-Export-Package: org.sourcepit.cargo4e
+Export-Package: org.sourcepit.cargo4e,
+ org.sourcepit.cargo4e.model

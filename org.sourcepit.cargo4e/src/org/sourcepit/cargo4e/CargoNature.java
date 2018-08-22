@@ -3,6 +3,8 @@ package org.sourcepit.cargo4e;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
+import org.sourcepit.cargo4e.model.CratesContainer;
+import org.sourcepit.cargo4e.model.ICratesContainer;
 import org.sourcepit.cargo4j.model.Metadata;
 
 public class CargoNature implements ICargoProject, IProjectNature {
@@ -28,8 +30,13 @@ public class CargoNature implements ICargoProject, IProjectNature {
 	}
 
 	@Override
+	public ICargoCore getCargoCore() {
+		return CargoCorePlugin.getCargoCore();
+	}
+
+	@Override
 	public Metadata getMetadata() {
-		return CargoCorePlugin.getCargoCore().getMetadata(project);
+		return getCargoCore().getMetadata(project);
 	}
 
 	@Override
@@ -60,5 +67,10 @@ public class CargoNature implements ICargoProject, IProjectNature {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public ICratesContainer getCratesContainer() {
+		return new CratesContainer(this);
 	}
 }
