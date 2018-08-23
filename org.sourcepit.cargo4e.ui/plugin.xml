@@ -43,6 +43,19 @@
          <enablement><or><adapt type="org.sourcepit.cargo4e.ICargoProject" >
 					</adapt>
                      </or></enablement>
+         <commonSorter
+               class="org.sourcepit.cargo4e.ui.RustNavigatorViewerComparator">
+            <parentExpression>
+               <or>
+                  <instanceof
+                        value="org.sourcepit.cargo4e.model.ICrate">
+                  </instanceof>
+                  <instanceof
+                        value="org.sourcepit.cargo4e.model.IRustFolder">
+                  </instanceof>
+               </or>
+            </parentExpression>
+         </commonSorter>
       </navigatorContent>
    </extension>
    <extension
