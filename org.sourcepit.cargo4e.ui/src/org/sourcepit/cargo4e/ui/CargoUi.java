@@ -7,6 +7,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Display;
 import org.osgi.framework.Bundle;
 
 public class CargoUi {
@@ -14,7 +15,7 @@ public class CargoUi {
 
 	public static final String IMG_CRATE = "jar_obj.png";
 
-	private final ImageRegistry imageRegistry = new ImageRegistry();
+	private final ImageRegistry imageRegistry = newImageRegistry();
 
 	private final Bundle bundle;
 
@@ -48,4 +49,23 @@ public class CargoUi {
 	public synchronized void dispose() {
 		imageRegistry.dispose();
 	}
+	
+	private static ImageRegistry newImageRegistry() {
+		final Display display = getDisplay();
+		return new ImageRegistry(display);
+	}
+
+	private static Display getDisplay() {
+		Display display = Display.getCurrent();
+		if (display == null) {
+			for (Thread thread : Thread.getAllStackTraces().keySet()) {
+				if (thread.getId() == 1) {
+					display = Display.findDisplay(thread);
+					break;
+				}
+			}
+		}
+		return display;
+	}
+
 }
