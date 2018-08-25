@@ -2,10 +2,13 @@ package org.sourcepit.cargo4e;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -16,11 +19,14 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ICoreRunnable;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.sourcepit.cargo4j.model.Metadata;
+import org.sourcepit.cargo4j.model.Package;
 
-public class CargoCore implements IResourceChangeListener, ICargoCore {
+public class CargoCore implements IResourceChangeListener, ICargoCore, IMetadataChangedListener {
 
 	private final IWorkspace eclipseWorkspace;
 
@@ -38,7 +44,6 @@ public class CargoCore implements IResourceChangeListener, ICargoCore {
 		this.eclipseWorkspace = eclipseWorkspace;
 		this.jobManager = jobManager;
 		this.stateLocation = stateLocation;
-
 	}
 
 	public synchronized void start() {
@@ -55,6 +60,8 @@ public class CargoCore implements IResourceChangeListener, ICargoCore {
 				}
 			}
 		};
+
+		addMetadataChangedListener(this);
 
 		final InitializeCargoProjectsRunnable initRunnable = new InitializeCargoProjectsRunnable(eclipseWorkspace,
 				jobManager, metadataStore);
@@ -86,6 +93,8 @@ public class CargoCore implements IResourceChangeListener, ICargoCore {
 		jobManager.cancel(CargoCoreJob.FAMILY);
 
 		this.eclipseWorkspace.removeResourceChangeListener(this);
+
+		removeMetadataChangedListener(this);
 
 		metadataStore = null;
 	}
@@ -170,6 +179,47 @@ public class CargoCore implements IResourceChangeListener, ICargoCore {
 		} catch (CoreException e) {
 			return false;
 		}
+	}
+
+	@Override
+	public void onMetadataChanged(IProject project, Metadata oldMetadata, Metadata newMetadata) {
+
+		try {
+			final IFolder depsFolder = project.getFolder("Cargo Dependencies");
+			if (!depsFolder.exists()) {
+				depsFolder.create(IResource.VIRTUAL, true, null);
+				depsFolder.setDerived(true, null);
+			}
+
+			final Map<String, IFolder> nameToFolderMap = new HashMap<>();
+			for (IResource member : depsFolder.members()) {
+				if (member.getType() == IResource.FOLDER) {
+					nameToFolderMap.put(member.getName(), (IFolder) member);
+				}
+			}
+
+			for (Package crate : newMetadata.getPackages()) {
+				IPath location = new Path(crate.getManifestPath()).removeLastSegments(1);
+				if (!project.getLocation().equals(location)) {
+					String name = crate.getName();
+					nameToFolderMap.remove(name);
+					IFolder depFolder = depsFolder.getFolder(name);
+					depFolder.createLink(location, IResource.REPLACE | IResource.ALLOW_MISSING_LOCAL, null);
+					depFolder.setDerived(true, null);
+				}
+			}
+
+			for (IFolder folder : nameToFolderMap.values()) {
+				folder.delete(true, null);
+			}
+
+			depsFolder.refreshLocal(IResource.DEPTH_INFINITE, null);
+
+		} catch (CoreException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 }
