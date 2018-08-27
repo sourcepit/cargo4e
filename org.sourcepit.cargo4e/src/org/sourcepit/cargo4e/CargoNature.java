@@ -5,7 +5,7 @@ import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.runtime.CoreException;
 import org.sourcepit.cargo4e.model.CratesContainer;
 import org.sourcepit.cargo4e.model.ICratesContainer;
-import org.sourcepit.cargo4j.model.Metadata;
+import org.sourcepit.cargo4j.model.metadata.Metadata;
 
 public class CargoNature implements ICargoProject, IProjectNature {
 
@@ -68,7 +68,7 @@ public class CargoNature implements ICargoProject, IProjectNature {
 		}
 		return true;
 	}
-
+	
 	@Override
 	public ICratesContainer getCratesContainer() {
 		return new CratesContainer(this);

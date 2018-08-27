@@ -12,7 +12,7 @@ import org.sourcepit.cargo4e.model.CratesContainer;
 import org.sourcepit.cargo4e.model.ICrate;
 import org.sourcepit.cargo4e.model.ICratesContainer;
 import org.sourcepit.cargo4e.model.IRustFolder;
-import org.sourcepit.cargo4j.model.Metadata;
+import org.sourcepit.cargo4j.model.metadata.Metadata;
 
 public class RustNavigatorContentProvider implements ITreeContentProvider, IMetadataChangedListener {
 

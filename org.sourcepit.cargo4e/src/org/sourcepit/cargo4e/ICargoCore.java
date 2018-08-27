@@ -1,7 +1,7 @@
 package org.sourcepit.cargo4e;
 
 import org.eclipse.core.resources.IProject;
-import org.sourcepit.cargo4j.model.Metadata;
+import org.sourcepit.cargo4j.model.metadata.Metadata;
 
 public interface ICargoCore {
 
@@ -9,6 +9,6 @@ public interface ICargoCore {
 
 	void removeMetadataChangedListener(IMetadataChangedListener listener);
 
-	Metadata getMetadata(IProject eclipseProject);
+	Metadata getMetadata(IProject project);
 
 }

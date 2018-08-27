@@ -32,7 +32,7 @@ import org.sourcepit.cargo4e.CargoCoreJob;
 import org.sourcepit.cargo4e.CargoCorePlugin;
 import org.sourcepit.cargo4e.ICargoProject;
 import org.sourcepit.cargo4e.NewRustProjectCoreRunnable;
-import org.sourcepit.cargo4j.model.Metadata;
+import org.sourcepit.cargo4j.model.metadata.Metadata;
 
 import com.moandjiezana.toml.Toml;
 import com.moandjiezana.toml.TomlWriter;

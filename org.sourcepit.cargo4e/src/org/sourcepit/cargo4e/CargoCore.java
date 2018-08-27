@@ -23,8 +23,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.IJobManager;
-import org.sourcepit.cargo4j.model.Metadata;
-import org.sourcepit.cargo4j.model.Package;
+import org.sourcepit.cargo4j.model.metadata.Metadata;
+import org.sourcepit.cargo4j.model.metadata.Package;
 
 public class CargoCore implements IResourceChangeListener, ICargoCore, IMetadataChangedListener {
 

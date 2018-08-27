@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.sourcepit.cargo4j.model.Package;
+import org.sourcepit.cargo4j.model.metadata.Package;
 
 public class Crate implements ICrate {
 

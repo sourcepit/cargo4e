@@ -8,7 +8,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.sourcepit.cargo4j.exec.CargoMetadataCommand;
-import org.sourcepit.cargo4j.model.Metadata;
+import org.sourcepit.cargo4j.model.metadata.Metadata;
 
 public class UpdateMetadataRunnable implements ICoreRunnable {
 	private final MetadataStore projectStateStore;
