@@ -1,5 +1,6 @@
 package org.sourcepit.cargo4e;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.jobs.IJobManager;
+import org.sourcepit.cargo4j.model.toolchain.ToolchainIdentifier;
 
 public class InitializeCargoProjectsRunnable implements ICoreRunnable {
 	private final IWorkspace eclipseWorkspace;
@@ -19,11 +21,17 @@ public class InitializeCargoProjectsRunnable implements ICoreRunnable {
 
 	private final MetadataStore projectStateStore;
 
+	private final File rustupExecutable;
+
+	private final ToolchainIdentifier toolchain;
+
 	public InitializeCargoProjectsRunnable(IWorkspace eclipseWorkspace, IJobManager jobManager,
-			MetadataStore projectStateStore) {
+			MetadataStore projectStateStore, File rustupExecutable, ToolchainIdentifier toolchain) {
 		this.eclipseWorkspace = eclipseWorkspace;
 		this.jobManager = jobManager;
 		this.projectStateStore = projectStateStore;
+		this.rustupExecutable = rustupExecutable;
+		this.toolchain = toolchain;
 	}
 
 	@Override
@@ -41,7 +49,8 @@ public class InitializeCargoProjectsRunnable implements ICoreRunnable {
 
 				final IProject project = (IProject) resource;
 				if (CargoCore.hasCargoNature(project)) {
-					jobHandles.add(CargoCoreJob.newUpdateMetadataJob(projectStateStore, project));
+					jobHandles.add(
+							CargoCoreJob.newUpdateMetadataJob(projectStateStore, project, rustupExecutable, toolchain));
 				}
 
 				return false;

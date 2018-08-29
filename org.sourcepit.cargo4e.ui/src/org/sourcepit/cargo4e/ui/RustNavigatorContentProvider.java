@@ -1,17 +1,21 @@
 package org.sourcepit.cargo4e.ui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Adapters;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.sourcepit.cargo4e.CargoCorePlugin;
+import org.sourcepit.cargo4e.ICargoCore;
 import org.sourcepit.cargo4e.ICargoProject;
 import org.sourcepit.cargo4e.IMetadataChangedListener;
-import org.sourcepit.cargo4e.model.CratesContainer;
 import org.sourcepit.cargo4e.model.ICrate;
 import org.sourcepit.cargo4e.model.ICratesContainer;
 import org.sourcepit.cargo4e.model.IRustFolder;
+import org.sourcepit.cargo4e.toolchain.IToolchain;
 import org.sourcepit.cargo4j.model.metadata.Metadata;
 
 public class RustNavigatorContentProvider implements ITreeContentProvider, IMetadataChangedListener {
@@ -42,11 +46,22 @@ public class RustNavigatorContentProvider implements ITreeContentProvider, IMeta
 	public Object[] getChildren(Object parentElement) {
 		final ICargoProject cargoProject = Adapters.adapt(parentElement, ICargoProject.class);
 		if (cargoProject != null) {
-			return new Object[] { cargoProject.getCratesContainer() };
+
+			final List<Object> cratesContainers = new ArrayList<>();
+
+			cratesContainers.add(cargoProject.getCratesContainer());
+			
+			final ICargoCore cargoCore = cargoProject.getCargoCore();
+			final IToolchain toolchain = cargoCore.getToolchain(cargoProject.getProject());
+			if (toolchain != null) {
+				cratesContainers.add(toolchain);
+			}
+			
+			return cratesContainers.toArray();
 		}
 
 		if (parentElement instanceof ICratesContainer) {
-			return ((CratesContainer) parentElement).getCrates().toArray();
+			return ((ICratesContainer) parentElement).getCrates().toArray();
 		}
 
 		if (parentElement instanceof ICrate) {

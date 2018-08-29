@@ -9,14 +9,20 @@ import org.eclipse.core.runtime.ICoreRunnable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.sourcepit.cargo4j.exec.CargoMetadataCommand;
 import org.sourcepit.cargo4j.model.metadata.Metadata;
+import org.sourcepit.cargo4j.model.toolchain.ToolchainIdentifier;
 
 public class UpdateMetadataRunnable implements ICoreRunnable {
 	private final MetadataStore projectStateStore;
 	private final IProject eclipseProject;
+	private final File rustupExecutable;
+	private final ToolchainIdentifier toolchain;
 
-	public UpdateMetadataRunnable(MetadataStore projectStateStore, IProject eclipseProject) {
+	public UpdateMetadataRunnable(MetadataStore projectStateStore, IProject eclipseProject, File rustupExecutable,
+			ToolchainIdentifier toolchain) {
 		this.projectStateStore = projectStateStore;
 		this.eclipseProject = eclipseProject;
+		this.rustupExecutable = rustupExecutable;
+		this.toolchain = toolchain;
 	}
 
 	@Override
@@ -24,7 +30,7 @@ public class UpdateMetadataRunnable implements ICoreRunnable {
 		final File projectFolder = eclipseProject.getLocation().toFile();
 		final Metadata metadata;
 		try {
-			metadata = new CargoMetadataCommand().execute(projectFolder);
+			metadata = new CargoMetadataCommand(projectFolder, rustupExecutable, toolchain, true).execute();
 		} catch (IOException e) {
 			e.printStackTrace();
 			return;

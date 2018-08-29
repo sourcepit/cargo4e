@@ -1,6 +1,7 @@
 package org.sourcepit.cargo4e;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,8 +24,12 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.IJobManager;
+import org.sourcepit.cargo4e.toolchain.IToolchain;
+import org.sourcepit.cargo4e.toolchain.ToolchainManager;
+import org.sourcepit.cargo4j.exec.GetRustupExecutableCommand;
 import org.sourcepit.cargo4j.model.metadata.Metadata;
 import org.sourcepit.cargo4j.model.metadata.Package;
+import org.sourcepit.cargo4j.model.toolchain.ToolchainIdentifier;
 
 public class CargoCore implements IResourceChangeListener, ICargoCore, IMetadataChangedListener {
 
@@ -35,6 +40,14 @@ public class CargoCore implements IResourceChangeListener, ICargoCore, IMetadata
 	private final File stateLocation;
 
 	private final List<IMetadataChangedListener> listeners = new CopyOnWriteArrayList<>();
+
+	private File workingDirectory;
+
+	private File rustupExecutable;
+
+	private ToolchainIdentifier toolchain;
+
+	private ToolchainManager toolchainManager;
 
 	private MetadataStore metadataStore;
 
@@ -52,26 +65,41 @@ public class CargoCore implements IResourceChangeListener, ICargoCore, IMetadata
 		}
 		running = true;
 
-		metadataStore = new MetadataStore(stateLocation) {
-			@Override
-			protected void noifyMetadataChanged(IProject project, Metadata oldMetadata, Metadata newMetadata) {
-				for (IMetadataChangedListener listener : listeners) {
-					listener.onMetadataChanged(project, oldMetadata, newMetadata);
+		workingDirectory = new File(System.getProperty("user.dir"));
+
+		try {
+			rustupExecutable = new GetRustupExecutableCommand(workingDirectory).execute();
+
+			toolchain = ToolchainIdentifier.parse("stable");
+
+			toolchainManager = new ToolchainManager(workingDirectory, rustupExecutable, toolchain);
+			toolchainManager.start();
+
+			metadataStore = new MetadataStore(stateLocation) {
+				@Override
+				protected void noifyMetadataChanged(IProject project, Metadata oldMetadata, Metadata newMetadata) {
+					for (IMetadataChangedListener listener : listeners) {
+						listener.onMetadataChanged(project, oldMetadata, newMetadata);
+					}
 				}
-			}
-		};
+			};
 
-		addMetadataChangedListener(this);
+			addMetadataChangedListener(this);
 
-		final InitializeCargoProjectsRunnable initRunnable = new InitializeCargoProjectsRunnable(eclipseWorkspace,
-				jobManager, metadataStore);
+			final InitializeCargoProjectsRunnable initRunnable = new InitializeCargoProjectsRunnable(eclipseWorkspace,
+					jobManager, metadataStore, rustupExecutable, toolchain);
 
-		final CargoCoreJob initJob = new CargoCoreJob("Initialize Cargo Projects", initRunnable);
-		initJob.setSystem(true);
-		initJob.schedule();
+			final CargoCoreJob initJob = new CargoCoreJob("Initialize Cargo Projects", initRunnable);
+			initJob.setSystem(true);
+			initJob.schedule();
 
-		eclipseWorkspace.addResourceChangeListener(this,
-				IResourceChangeEvent.POST_CHANGE | IResourceChangeEvent.PRE_DELETE);
+			eclipseWorkspace.addResourceChangeListener(this,
+					IResourceChangeEvent.POST_CHANGE | IResourceChangeEvent.PRE_DELETE);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -97,6 +125,15 @@ public class CargoCore implements IResourceChangeListener, ICargoCore, IMetadata
 		removeMetadataChangedListener(this);
 
 		metadataStore = null;
+
+		toolchainManager.stop();
+		toolchainManager = null;
+
+		toolchain = null;
+
+		rustupExecutable = null;
+
+		workingDirectory = null;
 	}
 
 	@Override
@@ -149,7 +186,8 @@ public class CargoCore implements IResourceChangeListener, ICargoCore, IMetadata
 			if (!changedProjects.isEmpty()) {
 				final List<CargoCoreJob> updateJobs = new ArrayList<>();
 				for (IProject changedProject : changedProjects) {
-					updateJobs.add(CargoCoreJob.newUpdateMetadataJob(metadataStore, changedProject));
+					updateJobs.add(CargoCoreJob.newUpdateMetadataJob(metadataStore, changedProject, rustupExecutable,
+							toolchain));
 				}
 
 				final CargoCoreJob updateJob = new CargoCoreJob("Update Cargo Projects", new ICoreRunnable() {
@@ -171,6 +209,11 @@ public class CargoCore implements IResourceChangeListener, ICargoCore, IMetadata
 	@Override
 	public Metadata getMetadata(IProject eclipseProject) {
 		return hasCargoNature(eclipseProject) ? metadataStore.getMetadata(eclipseProject) : null;
+	}
+
+	@Override
+	public IToolchain getToolchain(IProject project) {
+		return hasCargoNature(project) ? toolchainManager.getToolchain(project) : null;
 	}
 
 	static boolean hasCargoNature(IProject project) {

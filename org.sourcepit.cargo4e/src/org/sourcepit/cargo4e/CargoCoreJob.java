@@ -1,5 +1,6 @@
 package org.sourcepit.cargo4e;
 
+import java.io.File;
 import java.util.List;
 
 import org.eclipse.core.resources.IProject;
@@ -10,6 +11,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobManager;
 import org.eclipse.core.runtime.jobs.Job;
+import org.sourcepit.cargo4j.model.toolchain.ToolchainIdentifier;
 
 public class CargoCoreJob extends Job {
 
@@ -36,10 +38,12 @@ public class CargoCoreJob extends Job {
 			return e.getStatus();
 		}
 	}
-	
-	public static CargoCoreJob newUpdateMetadataJob(MetadataStore projectStateStore, IProject eclipseProject) {
+
+	public static CargoCoreJob newUpdateMetadataJob(MetadataStore projectStateStore, IProject eclipseProject,
+			File rustupExecutable, ToolchainIdentifier toolchain) {
 		String jobName = eclipseProject.getName();
-		UpdateMetadataRunnable runnable = new UpdateMetadataRunnable(projectStateStore, eclipseProject);
+		UpdateMetadataRunnable runnable = new UpdateMetadataRunnable(projectStateStore, eclipseProject,
+				rustupExecutable, toolchain);
 		CargoCoreJob initProjectJob = new CargoCoreJob(jobName, runnable);
 		return initProjectJob;
 	}

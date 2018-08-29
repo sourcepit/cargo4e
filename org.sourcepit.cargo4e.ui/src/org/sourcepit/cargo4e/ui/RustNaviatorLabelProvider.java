@@ -12,6 +12,7 @@ import org.sourcepit.cargo4e.model.ICratesContainer;
 import org.sourcepit.cargo4e.model.IRustFile;
 import org.sourcepit.cargo4e.model.IRustFolder;
 import org.sourcepit.cargo4e.model.IRustResource;
+import org.sourcepit.cargo4e.toolchain.IToolchain;
 
 public class RustNaviatorLabelProvider implements IStyledLabelProvider, ILabelProvider {
 
@@ -58,6 +59,9 @@ public class RustNaviatorLabelProvider implements IStyledLabelProvider, ILabelPr
 
 	@Override
 	public StyledString getStyledText(Object element) {
+		if (element instanceof IToolchain) {
+			return new StyledString("Rust System Libraries");
+		}
 		if (element instanceof ICratesContainer) {
 			return new StyledString("Cargo Dependencies");
 		}
@@ -66,7 +70,7 @@ public class RustNaviatorLabelProvider implements IStyledLabelProvider, ILabelPr
 			final ICrate crate = (ICrate) element;
 
 			final StyledString text = new StyledString(crate.getName());
-			text.append(" - " + crate.getLocation(), StyledString.QUALIFIER_STYLER);
+			text.append(" " + crate.getVersion() + " - " + crate.getLocation(), StyledString.QUALIFIER_STYLER);
 
 			return text;
 		}

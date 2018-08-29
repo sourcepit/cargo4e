@@ -9,7 +9,7 @@ import org.sourcepit.cargo4e.ICargoProject;
 import org.sourcepit.cargo4j.model.metadata.Metadata;
 import org.sourcepit.cargo4j.model.metadata.Package;
 
-public class CratesContainer implements ICratesContainer {
+public class CratesContainer extends AbstractCratesContainer implements ICratesContainer {
 
 	private final ICargoProject project;
 
@@ -18,15 +18,7 @@ public class CratesContainer implements ICratesContainer {
 	}
 
 	@Override
-	public List<ICrate> getCrates() {
-		List<ICrate> crates = new ArrayList<>();
-		for (Package pkg : getPackages()) {
-			crates.add(new Crate(this, pkg.getId()));
-		}
-		return crates;
-	}
-
-	private List<Package> getPackages() {
+	protected List<Package> getPackages() {
 		List<Package> packages = new ArrayList<>();
 		Metadata metadata = project.getMetadata();
 		if (metadata != null) {
@@ -38,16 +30,6 @@ public class CratesContainer implements ICratesContainer {
 			}
 		}
 		return packages;
-	}
-
-	@Override
-	public Package resolvePackage(String packageId) {
-		for (Package pkg : getPackages()) {
-			if (packageId.equals(pkg.getId())) {
-				return pkg;
-			}
-		}
-		return null;
 	}
 
 	@Override

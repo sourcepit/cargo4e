@@ -10,4 +10,6 @@ public interface ICrate {
 	String getName();
 
 	IPath getLocation();
+
+	String getVersion();
 }

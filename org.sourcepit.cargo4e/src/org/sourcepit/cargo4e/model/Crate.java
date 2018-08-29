@@ -27,6 +27,11 @@ public class Crate implements ICrate {
 	public String getName() {
 		return getPackage().getName();
 	}
+	
+	@Override
+	public String getVersion() {
+		return getPackage().getVersion();
+	}
 
 	@Override
 	public IPath getLocation() {
